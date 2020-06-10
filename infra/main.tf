@@ -1,12 +1,12 @@
 resource "azurerm_resource_group" "demo01" {
-    name              = var.rgName
+    name              = "brewdis-dev"
     location          = "westeurope"
 }
  
 resource "azurerm_redis_cache" "demo01" {
-  count               = length(var.redisRegions)
-  name                = "brewdis-${var.redisRegions[count.index]}"
-  location            = var.redisRegions[count.index]
+  count               = 1
+  name                = "brews-dev"
+  location            = "westeurope"
   resource_group_name = azurerm_resource_group.demo01.name
   capacity            = 2
   family              = "C"
@@ -14,7 +14,7 @@ resource "azurerm_redis_cache" "demo01" {
 }
 
 resource "azurerm_spring_cloud_service" "demo01" {
-  name                = var.svcName
+  name                = "brewdis-spring-cloud"
   resource_group_name = azurerm_resource_group.demo01.name
   location            = "westeurope"
 
@@ -26,7 +26,7 @@ resource "azurerm_spring_cloud_service" "demo01" {
 }
 
 resource "azurerm_spring_cloud_app" "brew" {
-  name                = var.appName
+  name                = "storefront-dev"
   resource_group_name = azurerm_resource_group.demo01.name
   service_name        = azurerm_spring_cloud_service.demo01.name
 }
